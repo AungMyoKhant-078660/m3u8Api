@@ -83,7 +83,7 @@ app.get("/", async (req, res) => {
   return;
 });
 
-const localhost = 2000;
-app.listen(localhost, () => {
+let port = process.env.PORT || 2000;
+app.listen(port, () => {
   console.log(`Listenig on localhost ${localhost}`);
 });
