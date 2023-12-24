@@ -4,11 +4,13 @@ const https = require("https");
 const { VK } = require("vk-io");
 const axios = require("axios");
 require("dotenv").config();
+const cors = require("cors");
 
 const vk = new VK({
   token: process.env.token,
 });
 
+app.use(cors());
 const getComments = async () => {
   return await vk.api.board.getComments({
     group_id: process.env.group_id,
@@ -59,7 +61,7 @@ const mainData = async () => {
   return res_m3u8;
 };
 
-app.get("/video/m3u8", async (req, res) => {
+app.get("/video/m3u8", cors(), async (req, res) => {
   //here
   const data = await mainData();
 
