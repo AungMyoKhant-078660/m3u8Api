@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HLS</title>
+  </head>
+  <body>
+    <!-- <script src="../dist/hls.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+
+    <center>
+      <h1>Hls.js demo - basic usage</h1>
+      <video width="480" height="360" id="video" controls></video>
+    </center>
+
+    <script>
+      let video = document.getElementById("video");
+
+      const getM3u8 = async (m_link) => {
+        try {
+          const response = await fetch(m_link, {
+            method: "GET",
+          });
+          const data = response.blob();
+          return data;
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      const media = (data) => {
+        if (Hls.isSupported()) {
+          var hls = new Hls({
+            debug: true,
+          });
+          hls.loadSource(data);
+          hls.attachMedia(video);
+          hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+            video.muted = true;
+            video.play();
+          });
+        }
+        // hls.js is not supported on platforms that do not have Media Source Extensions (MSE) enabled.
+        // When the browser has built-in HLS support (check using `canPlayType`), we can provide an HLS manifest (i.e. .m3u8 URL) directly to the video element through the `src` property.
+        // This is using the built-in support of the plain video element, without using hls.js.
+        //application/vnd.apple.mpegurl
+        else if (video.canPlayType("application/x-mpegurl")) {
+          video.src = data;
+          video.addEventListener("canplay", function () {
+            video.play();
+          });
+        }
+      };
+
+      const main = async () => {
+        const m3u8_data = await getM3u8("/video/m3u8");
+        if (m3u8_data) {
+          const blob_data = URL.createObjectURL(m3u8_data);
+          media(blob_data);
+          URL.revokeObjectURL(blob_data);
+        }
+      };
+
+      main();
+    </script>
+  </body>
+</html>
