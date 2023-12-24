@@ -2,9 +2,6 @@ const express = require("express");
 const app = express();
 const https = require("https");
 const { VK } = require("vk-io");
-const request = require("request");
-const { Http2ServerRequest } = require("http2");
-const fs = require("fs");
 const axios = require("axios");
 require("dotenv").config();
 
