@@ -82,5 +82,5 @@ app.get("/", async (req, res) => {
 
 let port = process.env.PORT || 2000;
 app.listen(port, () => {
-  console.log(`Listenig on localhost ${localhost}`);
+  console.log(`Listenig on localhost ${port}`);
 });
