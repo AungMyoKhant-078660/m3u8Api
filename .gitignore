@@ -2,4 +2,5 @@
 READ.me
 getComments.js
 /node_modules
+.env
 
